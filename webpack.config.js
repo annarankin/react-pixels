@@ -9,6 +9,7 @@ module.exports = {
     path: path.join(__dirname, 'build'),
     filename: path.join('js', 'bundle.js')
   },
+  resolveLoader: { root: path.join(__dirname, "node_modules") },
   module: {
     loaders: [{
       test: /\.js$/,
@@ -19,7 +20,7 @@ module.exports = {
     }, {
       test: /\.css$/,
       include: path.join(__dirname, 'src', 'styles'),
-      loader: ExtractTextPlugin.extract('style!css')
+      loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
     }]
   },
   plugins: [
