@@ -1,0 +1,1 @@
+export GameBoard from './game_board'
