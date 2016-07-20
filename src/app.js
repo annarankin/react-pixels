@@ -5,7 +5,18 @@ import { GameBoard } from './components'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 
-render(<Provider store={store}>
+class App extends Component {
+  state = {
+    drawingData: []
+  }
+
+  render() {
+    return(
+      <Provider store={store}>
         <GameBoard/>
-      </Provider>, 
-      document.getElementById('app'))
+      </Provider>
+    )
+  }
+}
+
+render(<App/>, document.getElementById('app'))
