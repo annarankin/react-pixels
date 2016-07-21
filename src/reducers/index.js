@@ -1,2 +1,2 @@
 export colors from './colors.js'
-export drawingData from './drawing_data.js'
+export pixelData from './pixel_data.js'
