@@ -1,8 +1,11 @@
 import styles from './styles/style.css'
+
 import React, { Component } from 'react'
 import ReactDOM, { render } from 'react-dom'
-import { GameBoard } from './components'
 import { Provider } from 'react-redux'
+
+import { GameBoard } from './components'
+import { Square } from './shapes'
 import store from './redux/store'
 
 class App extends Component {
@@ -11,6 +14,9 @@ class App extends Component {
   }
 
   render() {
+    // TO DO: remove
+    window.Square = Square
+    
     return(
       <Provider store={store}>
         <GameBoard/>

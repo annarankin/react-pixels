@@ -1,6 +1,47 @@
 export default class Square {
-  constructor() {
-    
+  constructor(ctx, size=100, center={x: 0, y: 0}) {
+    this.size = size
+    this.center = center
+    this.ctx = ctx
+    this.vertices = this.getVertices(center, size)
+    this.path = this.getPath(this.vertices)
+  }
+
+  fill(){
+    const { ctx, center, size } = this
+    const vertices = this.getVertices(center, size)
+    const path = this.getPath(vertices)
+    ctx.fillStyle = 'rgb(0,0,0)'
+    ctx.fill(path)
+  }
+
+  stroke(){
+    const { ctx, center, size } = this
+    const vertices = this.getVertices(center, size)
+    const path = this.getPath(vertices)
+    ctx.strokeStyle = 'rgb(0,0,0)'
+    ctx.stroke(path)
+  }
+
+  // ------ private? -------
+
+  getVertices(center, size) {
+    return ([ {x: center.x, y: center.y},
+      {x: center.x + size, y: center.y},
+      {x: center.x + size, y: center.y + size},
+      {x: center.x, y: center.y + size}
+    ])
+  }
+
+  getPath(vertices){
+    const path = new Path2D()
+
+    path.moveTo(vertices[0].x, vertices[0].y);
+
+    vertices.forEach(function(coords) {
+      path.lineTo(coords.x, coords.y)
+    })
+    return path
   }
 }
 
@@ -27,16 +68,7 @@ export default class Square {
 //   }.bind(this)
 
 //   const draw = function draw(){
-//     const sqr = new Path2D();
-//     const sqrVertices = getVertices();
-                        
-//     this.ctx.fillStyle = `rgb(${Math.round(center.y * 0.25)},${Math.round(center.y * 0.25)},${Math.round(center.y * 0.75)})`;
-//     sqr.moveTo(sqrVertices[0].x, sqrVertices[0].y);
 
-//     sqrVertices.forEach(function(coords) {
-//       sqr.lineTo(coords.x, coords.y)
-//     })
-//     this.ctx.fill(sqr);
 //   }.bind(this)
 
 //   const getVertices = function getVertices() {
