@@ -1,5 +1,6 @@
 export default class Square {
-  constructor(ctx, size=100, center={x: 0, y: 0}) {
+  constructor(ctx, size=100, center={x: 0, y: 0}, color='#000') {
+    this.color = color
     this.size = size
     this.center = center
     this.ctx = ctx
@@ -8,22 +9,27 @@ export default class Square {
   }
 
   fill(){
-    const { ctx, center, size } = this
-    const vertices = this.getVertices(center, size)
-    const path = this.getPath(vertices)
-    ctx.fillStyle = 'rgb(0,0,0)'
+    this.updatePath()
+    const { ctx, path, color } = this
+
+    ctx.fillStyle = color
     ctx.fill(path)
   }
 
   stroke(){
-    const { ctx, center, size } = this
-    const vertices = this.getVertices(center, size)
-    const path = this.getPath(vertices)
-    ctx.strokeStyle = 'rgb(0,0,0)'
+    this.updatePath()
+    const { ctx, path, color } = this
+
+    ctx.strokeStyle = color
     ctx.stroke(path)
   }
 
   // ------ private? -------
+
+  updatePath() {
+    this.vertices = this.getVertices(this.center, this.size)
+    this.path = this.getPath(this.vertices)
+  }
 
   getVertices(center, size) {
     return ([ {x: center.x, y: center.y},
@@ -41,6 +47,9 @@ export default class Square {
     vertices.forEach(function(coords) {
       path.lineTo(coords.x, coords.y)
     })
+
+    path.lineTo(vertices[0].x, vertices[0].y);
+
     return path
   }
 }
