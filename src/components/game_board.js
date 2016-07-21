@@ -10,6 +10,7 @@ export class GameBoard extends Component {
 
   // Create grid function
   // grab pixel data and generate squares for the grid
+  // Do we want to serialize the instances themselves? Iono
 
   strokeGrid = () => {
     // grab squaregrid and do this for each
