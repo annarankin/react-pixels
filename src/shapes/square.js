@@ -20,7 +20,7 @@ export default class Square {
     this.updatePath()
     const { ctx, path, color } = this
 
-    ctx.strokeStyle = color
+    ctx.strokeStyle = '#eee'
     ctx.stroke(path)
   }
 
