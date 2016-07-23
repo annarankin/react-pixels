@@ -30,7 +30,7 @@ export class GameBoard extends Component {
         return pixel
       })
     })
-    this.strokeGrid(pixels, this.ctx)
+    this.strokeGrid(pixels, ctx)
 
     this.setState({pixels: pixels})     
   }
@@ -76,11 +76,16 @@ export class GameBoard extends Component {
 
   handleDrag = (event) => {
     if (!this.state.dragging) {return}
+    //  fill pixel, add newly filled pixel to array of pixels to be sent to reducer
     this.fillPixel(event)
   }
 
   getContext = (c) => {
     this.ctx = c.getContext('2d')
+  }
+
+  handleMouseUp = (event) => {
+    this.setState({dragging: false})
   }
 
   render(){
@@ -93,8 +98,9 @@ export class GameBoard extends Component {
         height={this.props.dimensions.height}
         onClick={(event) => { this.fillPixel(event) }}
         onMouseDown={() => {this.setState({dragging: true})}}
-        onMouseUp={() => {this.setState({dragging: false})}}
+        onMouseUp={(event) => {this.handleMouseUp(event)}}
         onMouseMove={(event) => { this.handleDrag(event) }}
+        onMouseLeave={(event) => {this.setState({dragging: false})}}
         ref={this.getContext}
       >
         <h1>Too bad!</h1>
