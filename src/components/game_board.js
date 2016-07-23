@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Square } from '../shapes'
 
-
 export class GameBoard extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -17,35 +16,42 @@ export class GameBoard extends Component {
   componentDidMount() {
     const { pixelData } = this.props
     const { size } = this.props.dimensions
-    const { ctx } = this.state
+    const { ctx } = this
 
     const pixels = pixelData.map((row, x) => {
       return row.map((col, y) => {
         const coords = { x: col.coords[0] * size, y: col.coords[1] * size }
         const pixel = new Square(
-          null,
+          ctx,
           size,
           coords,
-          '#' + col.fillColor
+          col.fillColor
         )
         return pixel
       })
     })
+    this.strokeGrid(pixels, this.ctx)
+
     this.setState({pixels: pixels})     
   }
 
-  componentDidUpdate = () => {
-    
+
+  componentWillReceiveProps = (nextProps) => {
+    const noChangesOccurred = (_.isEqual(nextProps.pixelData, this.props.pixelData))
+    if (noChangesOccurred) { return }
+    this.fillPixels(nextProps.pixelData)
+    this.strokeGrid(this.state.pixels, this.ctx)
+  }
+
+  fillPixels = (pixelData) => {
     this.state.pixels.forEach((row, x) => {
       row.forEach((square, y) => {
-        square.ctx = this.state.ctx
-        square.color = '#' + this.props.pixelData[x][y].fillColor
+        square.color = pixelData[x][y].fillColor
         square.fill()
       })
     })
-    this.strokeGrid(this.state.pixels, this.state.ctx)
   }
-  
+
   strokeGrid = (pixels, ctx) => {
     pixels.forEach((row, x) => {
       row.forEach((square, y) => {
@@ -53,22 +59,19 @@ export class GameBoard extends Component {
         square.stroke()
       })
     })    
-    // grab squaregrid and do this for each
-    // const sqr = new Path2D();
-    // this.ctx.strokeStyle = 'rgb(200,200,200)';
-    // sqr.moveTo(100, 100)
-    // sqr.lineTo(100, 200)
-    // sqr.lineTo(200, 200)
-    // sqr.lineTo(200, 100)
-    // sqr.lineTo(100, 100)
-    // this.ctx.stroke(sqr)
   }
 
   fillPixel = (event) => {
-    const { dispatch, dimensions } = this.props
+    const { dispatch, dimensions, color, pixelData } = this.props
     const { offsetX, offsetY } = event.nativeEvent
-    console.log('Dispatch an action to update the state of the pixel board')
-    dispatch({type: 'FILL_PIXEL', coords: { x: offsetX, y: offsetY}, size: dimensions.size})
+
+    const pixelX = Math.floor(offsetX / dimensions.size)
+    const pixelY = Math.floor(offsetY / dimensions.size)
+    const noChangesOccurred = pixelData[pixelX][pixelY].fillColor === color
+    if (noChangesOccurred) { return }
+    console.log('action firing')
+    // compare pixel color to this.props.color
+    dispatch({type: 'FILL_PIXEL', coords: { x: offsetX, y: offsetY}, size: dimensions.size, color})
   }
 
   handleDrag = (event) => {
@@ -77,12 +80,10 @@ export class GameBoard extends Component {
   }
 
   getContext = (c) => {
-    this.setState({ctx: c.getContext('2d')})
-    console.log(this.state)
+    this.ctx = c.getContext('2d')
   }
 
   render(){
-    // TO DO: remove
     window.board = this
 
     return(
@@ -105,8 +106,9 @@ export class GameBoard extends Component {
 
 function mapStateToProps(state) {
   return {
-    pixelData: state.pixelData,
-    dimensions: state.dimensions,
+    pixelData: state.pixelData.present,
+    dimensions: state.dimensions.present,
+    color: state.colors.present,
   }
 }
 

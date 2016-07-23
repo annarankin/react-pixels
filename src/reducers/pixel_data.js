@@ -12,7 +12,7 @@ export default function (state = defaultData(), action) {
       ...originalColumn.slice(0, y),
       {
         ...originalSquare,
-        fillColor: '000',
+        fillColor: action.color,
       },
       ...originalColumn.slice(y + 1),
     ]
@@ -31,7 +31,7 @@ function defaultData() {
   // 16 x 12 board for now
   const grid = numberArray(16).map((row, x) => { 
     return numberArray(12).map((col, y) => {
-      return { coords: [x, y], fillColor: 'FFF' }
+      return { coords: [x, y], fillColor: '#FFF' }
     }) 
   })
   return grid

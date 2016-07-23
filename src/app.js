@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import ReactDOM, { render } from 'react-dom'
 import { Provider } from 'react-redux'
 
-import { GameBoard } from './components'
+import { GameBoard, ColorPicker, Controls } from './components'
 import store from './redux/store'
 
 class App extends Component {
@@ -13,12 +13,13 @@ class App extends Component {
   }
 
   render() {
-    // TO DO: remove
-    // window.Square = Square
-    
     return(
       <Provider store={store}>
-        <GameBoard/>
+        <div style={{width: '800px'}}>
+          <Controls/>
+          <GameBoard/>
+          <ColorPicker/>
+        </div>
       </Provider>
     )
   }
