@@ -3,8 +3,8 @@
 export default function (state = defaultData(), action) {
   switch(action.type) {
   case 'FILL_PIXEL':
-    // console.log(getPixelCoords(action.coords, action.size))
-    const { x, y } = getPixelCoords(action.coords, action.size)
+    const { newPixel } = action
+    const { x, y, color } = action.newPixel
     const originalColumn = [ ...state[x] ]
     const originalSquare = { ...originalColumn[y] }
 
@@ -12,7 +12,7 @@ export default function (state = defaultData(), action) {
       ...originalColumn.slice(0, y),
       {
         ...originalSquare,
-        fillColor: action.color,
+        color: color,
       },
       ...originalColumn.slice(y + 1),
     ]
@@ -22,6 +22,13 @@ export default function (state = defaultData(), action) {
       modifiedColumn,
       ...state.slice(x + 1),
     ]
+  case 'FILL_PIXEL_GROUP':
+    const pixelsToFill = action.pixels
+    const stateCopy = _.cloneDeep(state)
+    pixelsToFill.forEach((pixel, i) => { 
+      stateCopy[pixel.x][pixel.y].color = pixel.color
+    })
+    return stateCopy
   default:
     return state
   }
@@ -31,16 +38,12 @@ function defaultData() {
   // 16 x 12 board for now
   const grid = numberArray(16).map((row, x) => { 
     return numberArray(12).map((col, y) => {
-      return { coords: [x, y], fillColor: '#FFF' }
+      return { coords: [x, y], color: '#FFF' }
     }) 
   })
   return grid
 }
 
-function getPixelCoords(coords, size){
-  const { x, y } = coords
-  return { x: Math.floor(x/size), y: Math.floor(y/size)}
-}
 function numberArray(length) {
   return Array.apply([], Array(length)).map((el, index) => index)
 }

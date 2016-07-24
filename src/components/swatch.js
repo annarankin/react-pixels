@@ -30,7 +30,7 @@ export class Swatch extends Component {
 
 function mapStateToProps(state) {
   return {
-    colors: state.colors.present
+    colors: state.colors
   }
 }
 

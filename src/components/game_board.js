@@ -10,7 +10,8 @@ export class GameBoard extends Component {
   }
 
   state = {
-    pixels: []
+    pixels: [],
+    strokePixels: [],
   }
 
   componentDidMount() {
@@ -25,7 +26,7 @@ export class GameBoard extends Component {
           ctx,
           size,
           coords,
-          col.fillColor
+          col.color
         )
         return pixel
       })
@@ -35,86 +36,105 @@ export class GameBoard extends Component {
     this.setState({pixels: pixels})     
   }
 
-
   componentWillReceiveProps = (nextProps) => {
     const noChangesOccurred = (_.isEqual(nextProps.pixelData, this.props.pixelData))
     if (noChangesOccurred) { return }
     this.fillPixels(nextProps.pixelData)
-    this.strokeGrid(this.state.pixels, this.ctx)
+    this.strokeGrid(this.state.pixels)
   }
 
   fillPixels = (pixelData) => {
     this.state.pixels.forEach((row, x) => {
       row.forEach((square, y) => {
-        square.color = pixelData[x][y].fillColor
+        square.color = pixelData[x][y].color
         square.fill()
       })
     })
   }
 
-  strokeGrid = (pixels, ctx) => {
+  strokeGrid = (pixels) => {
     pixels.forEach((row, x) => {
       row.forEach((square, y) => {
-        square.ctx = ctx
         square.stroke()
       })
     })    
   }
 
-  fillPixel = (event) => {
-    const { dispatch, dimensions, color, pixelData } = this.props
+  getPixelData = (event) => {
+    const { color }            = this.props
+    const { size }             = this.props.dimensions 
     const { offsetX, offsetY } = event.nativeEvent
 
-    const pixelX = Math.floor(offsetX / dimensions.size)
-    const pixelY = Math.floor(offsetY / dimensions.size)
-    const noChangesOccurred = pixelData[pixelX][pixelY].fillColor === color
-    if (noChangesOccurred) { return }
-    console.log('action firing')
-    // compare pixel color to this.props.color
-    dispatch({type: 'FILL_PIXEL', coords: { x: offsetX, y: offsetY}, size: dimensions.size, color})
+    const coords = { x: Math.floor(offsetX/size), y: Math.floor(offsetY/size) }
+    return { ...coords, color }
   }
+
+  fillPixel = (event) => {
+    console.log('action firing')
+    const { dispatch } = this.props
+    const newPixel = this.getPixelData(event)
+    const gridPixel = this.state.pixels[newPixel.x][newPixel.y]
+    gridPixel.color = this.props.color
+    gridPixel.fill()
+    this.strokeGrid(this.state.pixels)
+  }
+
+  // Event handlers
 
   handleDrag = (event) => {
     if (!this.state.dragging) {return}
-    //  fill pixel, add newly filled pixel to array of pixels to be sent to reducer
+    const { pixelData } = this.props
+    const newPixel = this.getPixelData(event)
     this.fillPixel(event)
-  }
+    const noChangesOccurred = pixelData[newPixel.x][newPixel.y].color === newPixel.color
+    if (noChangesOccurred) { return }
 
-  getContext = (c) => {
-    this.ctx = c.getContext('2d')
+    this.setState({ strokePixels: this.state.strokePixels.concat(newPixel) })
   }
 
   handleMouseUp = (event) => {
-    this.setState({dragging: false})
+    if (_.isEmpty(this.state.strokePixels)) { return }
+    const { dispatch } = this.props
+    dispatch({type: 'FILL_PIXEL_GROUP', pixels: this.state.strokePixels})
+    this.setState({ dragging: false, strokePixels: [] })
+  }
+  
+  handleMouseDown = (event) => {
+    const newPixel = this.getPixelData(event)   
+    this.fillPixel(event) 
+    this.setState({ dragging: true, strokePixels: [newPixel] })
   }
 
   render(){
     window.board = this
-
     return(
       <canvas 
         id="game-board" 
         width={this.props.dimensions.width} 
         height={this.props.dimensions.height}
-        onClick={(event) => { this.fillPixel(event) }}
-        onMouseDown={() => {this.setState({dragging: true})}}
+        onMouseDown={(event) => {this.handleMouseDown(event)}}
         onMouseUp={(event) => {this.handleMouseUp(event)}}
         onMouseMove={(event) => { this.handleDrag(event) }}
-        onMouseLeave={(event) => {this.setState({dragging: false})}}
+        onMouseLeave={(event) => {this.handleMouseUp(event)}}
         ref={this.getContext}
       >
         <h1>Too bad!</h1>
         <p>Your browser does not seem to support canvas. Consider upgrading!</p>
       </canvas>
     )
+  }
+  // Helper Functions
+
+  getContext = (c) => {
+    this.ctx = c.getContext('2d')
   } 
 }
 
 function mapStateToProps(state) {
   return {
     pixelData: state.pixelData.present,
-    dimensions: state.dimensions.present,
-    color: state.colors.present,
+    dimensions: state.dimensions,
+    color: state.colors,
   }
 }
 
