@@ -13,6 +13,13 @@ Electron/React/Redux application for creating pixel art!
 
 Work in progress. Right now, save/load don't work.
 
+## Tools
+
+- [Electron](http://electron.atom.io/) - awesomely simple tool for building cross-platform apps! SO EXCITE
+- [React](https://facebook.github.io/react/) - for building HTML components and managing UI
+- [Redux](http://redux.js.org/) - for retaining and managing app-wide state
+- [lodash](https://lodash.com/) - for workin' with data structures more easily
+
 ## TO DO/Notes:
 
 ### Pencil & Fill tools
