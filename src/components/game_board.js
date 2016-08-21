@@ -76,7 +76,7 @@ export class GameBoard extends Component {
     const gridPixel = this.state.pixels[newPixel.x][newPixel.y]
     gridPixel.color = this.props.color
     gridPixel.fill()
-    this.strokeGrid(this.state.pixels)
+    gridPixel.stroke()
   }
 
   // Event handlers

@@ -14,6 +14,9 @@ export class Controls extends Component {
           onClick={() => { this.props.dispatch(ActionCreators.undo()) }}
         >Undo</button>
         <button
+          onClick={() => { this.props.dispatch({type: 'SHOW_IMG_DOWNLOAD' }) } }
+        >Download</button>
+        <button
           onClick={() => { this.props.dispatch(ActionCreators.redo()) }}
         >Redo</button>
       </div>
