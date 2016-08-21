@@ -9,13 +9,20 @@ export class Controls extends Component {
   render(){
     window.controls = this
     return(
-      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+      <div className="controls" style={{['-webkit-app-region']: 'drag', display: 'flex', justifyContent: 'space-around'}}>
+        <p>Pixely stuff</p>
+        <button
+          onClick={() => { this.props.dispatch({type: 'SAVE_IMG' }) } }
+        >Save</button>
+        <button
+          onClick={() => { this.props.dispatch({type: 'SAVE_IMG' }) } }
+        >Load</button>
+        <button
+          onClick={() => { this.props.dispatch({type: 'CLEAR_PIXELS' }) } }
+        >Clear</button>
         <button
           onClick={() => { this.props.dispatch(ActionCreators.undo()) }}
         >Undo</button>
-        <button
-          onClick={() => { this.props.dispatch({type: 'SHOW_IMG_DOWNLOAD' }) } }
-        >Download</button>
         <button
           onClick={() => { this.props.dispatch(ActionCreators.redo()) }}
         >Redo</button>

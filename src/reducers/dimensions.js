@@ -7,9 +7,9 @@ export default function (state = defaultData(), action) {
 }
 
 function defaultData() {
-  const width = 800, 
-        height = 600,
-        size = 50
+  const width = 512, 
+        height = 512,
+        size = 32
 
   return  { 
     size,

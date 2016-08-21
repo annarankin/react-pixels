@@ -2,6 +2,8 @@
 
 export default function (state = defaultData(), action) {
   switch(action.type) {
+  case 'CLEAR_PIXELS':
+    return defaultData()
   case 'FILL_PIXEL':
     const { newPixel } = action
     const { x, y, color } = action.newPixel
@@ -37,7 +39,7 @@ export default function (state = defaultData(), action) {
 function defaultData() {
   // 16 x 12 board for now
   const grid = numberArray(16).map((row, x) => { 
-    return numberArray(12).map((col, y) => {
+    return numberArray(16).map((col, y) => {
       return { coords: [x, y], color: '#FFF' }
     }) 
   })

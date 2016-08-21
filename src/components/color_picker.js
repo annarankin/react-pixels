@@ -14,7 +14,7 @@ export class ColorPicker extends Component {
 
   render(){
     return(
-      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+      <div className='color-picker' style={{display: 'flex', justifyContent: 'space-between'}}>
         {this.renderSwatches()}
       </div>
     )

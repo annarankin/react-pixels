@@ -31,9 +31,10 @@ export class GameBoard extends Component {
         return pixel
       })
     })
-    this.strokeGrid(pixels, ctx)
-
-    this.setState({pixels: pixels})     
+    this.setState({pixels: pixels}, () => {
+      this.fillPixels(pixelData)
+      this.strokeGrid(pixels)
+    })
   }
 
   componentWillReceiveProps = (nextProps) => {
