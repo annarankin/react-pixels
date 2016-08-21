@@ -6,6 +6,13 @@ Electron/React/Redux application for creating pixel art!
 
 ## Installation
 
+1. Clone the repo!
+1. `npm run install`!
+1. `npm start`!
+1. Doodle!!
+
+Work in progress. Right now, save/load don't work.
+
 ## TO DO/Notes:
 
 ### Pencil & Fill tools
