@@ -55,6 +55,7 @@ export class GameBoard extends Component {
   }
 
   strokeGrid = (pixels) => {
+    if (!this.props.gridEnabled) { return }
     pixels.forEach((row, x) => {
       row.forEach((square, y) => {
         square.stroke()
@@ -78,7 +79,7 @@ export class GameBoard extends Component {
     const gridPixel = this.state.pixels[newPixel.x][newPixel.y]
     gridPixel.color = this.props.color
     gridPixel.fill()
-    gridPixel.stroke()
+    if (this.props.gridEnabled) {gridPixel.stroke()}
   }
 
   floodFill = (event) => {
@@ -188,6 +189,7 @@ function mapStateToProps(state) {
     dimensions: state.dimensions,
     color: state.colors,
     drawMode: state.drawMode,
+    gridEnabled: state.gridEnabled,
   }
 }
 

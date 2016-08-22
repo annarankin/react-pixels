@@ -23,8 +23,8 @@ Work in progress. Right now, save/load don't work.
 ## TO DO/Notes:
 
 ### Pencil & Fill tools
-  - Need to implement decent flood-fill
-  - Add new "modes" - pencil/fill
+  - Need to implement decent flood-fill ✅
+  - Add new "modes" - pencil/fill ✅
   - Allow user to choose using UI
 
 ### Gradient Tool

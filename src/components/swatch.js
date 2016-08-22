@@ -21,8 +21,9 @@ export class Swatch extends Component {
     }
     return(
       <div
+        className={`swatch ${this.props.color === this.props.colors ? 'selected' : ''}`}
         style={swatchStyle}
-        onClick={() => this.setColor()}
+        onClick={() => this.setColor()} 
       />
     )
   } 
