@@ -28,7 +28,7 @@ export default function (state = defaultData(), action) {
     const pixelsToFill = action.pixels
     const stateCopy = _.cloneDeep(state)
     pixelsToFill.forEach((pixel, i) => { 
-      stateCopy[pixel.x][pixel.y].color = pixel.color
+      stateCopy[pixel.x][pixel.y].color = action.color
     })
     return stateCopy
   default:
@@ -40,7 +40,7 @@ function defaultData() {
   // 16 x 12 board for now
   const grid = numberArray(16).map((row, x) => { 
     return numberArray(16).map((col, y) => {
-      return { coords: [x, y], color: '#FFF' }
+      return { x, y, color: '#FFF' }
     }) 
   })
   return grid

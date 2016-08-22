@@ -7,6 +7,7 @@ export class GameBoard extends Component {
     dispatch: PropTypes.func.isRequired,
     pixelData: PropTypes.array.isRequired,
     dimensions: PropTypes.object.isRequired,
+    color: PropTypes.string.isRequired,
   }
 
   state = {
@@ -21,7 +22,7 @@ export class GameBoard extends Component {
 
     const pixels = pixelData.map((row, x) => {
       return row.map((col, y) => {
-        const coords = { x: col.coords[0] * size, y: col.coords[1] * size }
+        const coords = { x: col.x * size, y: col.y * size }
         const pixel = new Square(
           ctx,
           size,
@@ -80,6 +81,52 @@ export class GameBoard extends Component {
     gridPixel.stroke()
   }
 
+  floodFill = (event) => {
+    const { dispatch, color } = this.props
+    const pixelCoords = this.getPixelData(event)
+    const gridPixel = this.props.pixelData[pixelCoords.x][pixelCoords.y]
+
+    // debugger
+    if (color === gridPixel.color) { return console.log('Colors are the same!')}
+    console.log('Flood fill BEGIN') 
+
+    let queue          = []
+    const pixelsToFill = []
+    queue.push(gridPixel)
+
+    while (queue.length > 0) {
+      // console.log(queue)
+      const currentPixel = queue.shift()  
+      const neighbors = this.getNeighbors(currentPixel)
+      // debugger
+      const toFill = _.filter(neighbors, (neighbor) => {
+        console.log(!_.find(pixelsToFill, neighbor))
+        return !!neighbor && neighbor.color === currentPixel.color && !_.find(pixelsToFill, neighbor)
+      })
+      queue = _.uniqWith(queue.concat(toFill), _.isEqual)
+      pixelsToFill.push(currentPixel)
+      // either add them to the queue or eliminate them based on color/already analyzed
+      // remove the first pixel from the queue and add it to pixelsToFill
+    }
+    dispatch({type: 'FILL_PIXEL_GROUP', pixels: pixelsToFill, color})
+  }
+
+
+  getNeighbors = (pixel) => {
+    if (!pixel) {return []}
+
+    const { size }   = this.props.dimensions 
+    const { x,y }    = pixel
+    const { pixelData } = this.props
+
+    const topNeighbor     = !!pixelData[x][y-1] ? pixelData[x][y - 1] : undefined
+    const bottomNeighbor  = !!pixelData[x][y+1] ? pixelData[x][y + 1] : undefined
+    const rightNeighbor   =  !!pixelData[x + 1] ? pixelData[x+1][y] : undefined 
+    const leftNeighbor    =  !!pixelData[x - 1] ? pixelData[x-1][y] : undefined 
+    // try to grab neighbors... without dying :/
+    // debugger
+    return _.filter([topNeighbor, bottomNeighbor, rightNeighbor, leftNeighbor], (el) => {return !!el} )
+  }
   // Event handlers
 
   handleDrag = (event) => {
@@ -95,15 +142,19 @@ export class GameBoard extends Component {
 
   handleMouseUp = (event) => {
     if (_.isEmpty(this.state.strokePixels)) { return }
-    const { dispatch } = this.props
-    dispatch({type: 'FILL_PIXEL_GROUP', pixels: this.state.strokePixels})
+    const { dispatch, color } = this.props
+    dispatch({type: 'FILL_PIXEL_GROUP', pixels: this.state.strokePixels, color})
     this.setState({ dragging: false, strokePixels: [] })
   }
   
   handleMouseDown = (event) => {
-    const newPixel = this.getPixelData(event)   
-    this.fillPixel(event) 
-    this.setState({ dragging: true, strokePixels: [newPixel] })
+    if (this.props.drawMode === 'fill') {
+      this.floodFill(event)
+    } else {
+      this.fillPixel(event) 
+      const newPixel = this.getPixelData(event)  
+      this.setState({ dragging: true, strokePixels: [newPixel] })
+    } 
   }
 
   render(){
@@ -136,6 +187,7 @@ function mapStateToProps(state) {
     pixelData: state.pixelData.present,
     dimensions: state.dimensions,
     color: state.colors,
+    drawMode: state.drawMode,
   }
 }
 

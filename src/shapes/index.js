@@ -1,1 +1,2 @@
-export Square from './square.js'
+export Square from './square'
+export Grid from './grid'

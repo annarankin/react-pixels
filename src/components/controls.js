@@ -26,9 +26,16 @@ export class Controls extends Component {
         <button
           onClick={() => { this.props.dispatch(ActionCreators.redo()) }}
         >Redo</button>
+        <button
+          onClick={() => { this.props.dispatch({type: 'SWITCH_MODE'}) } }
+        >{this.props.drawMode}</button>
       </div>
     )
   } 
 }
 
-export default connect()(Controls)
+function mapStateToProps(state) {
+  return { drawMode: state.drawMode }
+}
+
+export default connect(mapStateToProps)(Controls)
