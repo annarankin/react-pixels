@@ -4,8 +4,9 @@
   "description": "Playing around with react and canvas in an attempt to creat a pixel art editor",
   "main": "index.js",
   "scripts": {
-    "start": "webpack; electron main.js",
-    "watch": "webpack --watch | electron main.js"
+    "start": "npm run build; electron main.js",
+    "watch": "webpack --watch | electron main.js",
+    "build": "cp -r ./images ./build/images; webpack"
   },
   "author": "Anna Rankin",
   "license": "ISC",

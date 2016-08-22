@@ -25,7 +25,7 @@ Work in progress. Right now, save/load don't work.
 ### Pencil & Fill tools
   - Need to implement decent flood-fill ✅
   - Add new "modes" - pencil/fill ✅
-  - Allow user to choose using UI
+  - Allow user to choose using UI ✅
 
 ### Gradient Tool
   - Fun tool to allow patterned fill! Maybe.
@@ -50,3 +50,7 @@ Work in progress. Right now, save/load don't work.
 
 ### Social media sharing?
   - Meh. Maybe.
+
+### Layers
+  - Allow multiple layers!
+  - Allow users to move individual layers
