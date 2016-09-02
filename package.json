@@ -7,7 +7,7 @@
   "scripts": {
     "start": "npm run build; electron main.js",
     "watch": "webpack --watch | electron main.js",
-    "build": "cp -r ./src/images ./build/images; webpack",
+    "build": "cp -r ./src/images ./app/images; webpack",
     "postinstall": "install-app-deps",
     "pack": "build --dir",
     "dist": "build"
