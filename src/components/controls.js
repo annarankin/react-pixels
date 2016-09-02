@@ -15,7 +15,7 @@ export class Controls extends Component {
           onClick={() => { this.props.dispatch({type: 'SAVE_IMG' }) } }
         >Save</button>
         <button
-          onClick={() => { this.props.dispatch({type: 'SAVE_IMG' }) } }
+          onClick={() => { this.props.dispatch({type: 'LOAD_IMG' }) } }
         >Load</button>
         <button
           onClick={() => { this.props.dispatch({type: 'CLEAR_PIXELS' }) } }
@@ -28,7 +28,7 @@ export class Controls extends Component {
         >Redo</button>
       </div>
     )
-  } 
+  }
 }
 
 

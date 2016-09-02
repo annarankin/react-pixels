@@ -4,9 +4,7 @@ let win
 function createWindow () {
   win = new BrowserWindow({width: 600, height: 600, titleBarStyle: 'hidden', backgroundColor: '#369', resizable: false})
 
-  win.loadURL(`file://${__dirname}/build/index.html`)
-
-  // win.webContents.openDevTools()
+  win.loadURL(`file://${__dirname}/app/index.html`)
 
   win.on('closed', () => {
     win = null
