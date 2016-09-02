@@ -9,6 +9,7 @@ module.exports = {
     path: path.join(__dirname, 'app'),
     filename: path.join('js', 'bundle.js')
   },
+  target: 'electron',
   resolveLoader: { root: path.join(__dirname, "node_modules") },
   module: {
     loaders: [{

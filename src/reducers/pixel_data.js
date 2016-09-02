@@ -1,5 +1,3 @@
-// import { SLIDESHOW_LOADING, ERROR_LOADING_SLIDESHOW, SLIDESHOW_LOADED } from '../actions/Slideshow'
-
 export default function (state = defaultData(), action) {
   switch(action.type) {
   case 'CLEAR_PIXELS':
@@ -27,10 +25,12 @@ export default function (state = defaultData(), action) {
   case 'FILL_PIXEL_GROUP':
     const pixelsToFill = action.pixels
     const stateCopy = _.cloneDeep(state)
-    pixelsToFill.forEach((pixel, i) => { 
+    pixelsToFill.forEach((pixel, i) => {
       stateCopy[pixel.x][pixel.y].color = action.color
     })
     return stateCopy
+  case 'LOAD_PIXEL_DATA':
+    return action.pixels
   default:
     return state
   }
@@ -38,10 +38,10 @@ export default function (state = defaultData(), action) {
 
 function defaultData() {
   // 16 x 12 board for now
-  const grid = numberArray(16).map((row, x) => { 
+  const grid = numberArray(16).map((row, x) => {
     return numberArray(16).map((col, y) => {
       return { x, y, color: '#FFF' }
-    }) 
+    })
   })
   return grid
 }
