@@ -10,16 +10,18 @@ export default function (state = getDefaultSwatches(), action) {
 
 function getDefaultSwatches() {
   return [
-    '#5F634F',
-    '#9BC4CB',
-    '#CFEBDF',
-    '#E2FADB',
-    '#DBEFBC',
+    '#000000',
+    '#AAAAAA',
     '#FFFFFF',
-    '#721121',
-    '#A5402D',
-    '#F15156',
-    '#FFC07F',
-    '#FFCF99',
+    '#DD1122',
+    '#FF5555',
+    '#FF8F33',
+    '#EECCAA',
+    '#FFFF55',
+    '#33E744',
+    '#4465CE',
+    '#7733A2',
+    '#DD55BC',
+    '#FFBBBB',
   ]
 }
