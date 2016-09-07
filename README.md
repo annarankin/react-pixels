@@ -11,8 +11,6 @@ Electron/React/Redux application for creating pixel art!
 1. `npm start`!
 1. Doodle!!
 
-Work in progress. Right now, save/load don't work.
-
 ## Tools
 
 - [Electron](http://electron.atom.io/) - awesomely simple tool for building cross-platform apps! SO EXCITE
@@ -20,9 +18,7 @@ Work in progress. Right now, save/load don't work.
 - [Redux](http://redux.js.org/) - for retaining and managing app-wide state
 - [lodash](https://lodash.com/) - for workin' with data structures more easily
 
-# Features
-
-## Done!
+# Features ✨
 
 ### Pencil & Fill tools
   - Need to implement decent flood-fill ✅
@@ -34,7 +30,16 @@ Work in progress. Right now, save/load don't work.
   - How to persist? Shareable? **(Using presets for now.)**
 
 ### Save/Load
-  - Allow users to save/load JSON objects representing image.
+  - Allow users to save/load JSON objects representing image. ✅
+
+### Building with Electron
+  - `npm run dist` should work fine. Just need to make sure there are no code-signing problems. 
+
+# Bugs! 🐛
+
+- Grid toggle button does not trigger a re-render of the canvas.
+
+# Upcoming Features 🌅
 
 ## Next:
 
