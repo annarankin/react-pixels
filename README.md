@@ -20,37 +20,43 @@ Work in progress. Right now, save/load don't work.
 - [Redux](http://redux.js.org/) - for retaining and managing app-wide state
 - [lodash](https://lodash.com/) - for workin' with data structures more easily
 
-## TO DO/Notes:
+# Features
+
+## Done!
 
 ### Pencil & Fill tools
   - Need to implement decent flood-fill ✅
   - Add new "modes" - pencil/fill ✅
   - Allow user to choose using UI ✅
 
-### Gradient Tool
-  - Fun tool to allow patterned fill! Maybe.
-
 ### Palette Customization
-  - Create interface to allow users to change/save/export/whatnot their own color palettes.
-  - How to persist? Shareable?
+  - Create interface to allow users to change/save/export/whatnot their own color palettes. ✅
+  - How to persist? Shareable? **(Using presets for now.)**
+
+### Save/Load
+  - Allow users to save/load JSON objects representing image.
+
+## Next:
+
+### Export
+  - Save png to user's comp
+
+### Layers
+  - Allow multiple layers! _(Note: Abstract the grid to layer)_
+  - Allow users to move individual layers
 
 ### Resize Canvas
   - Allow user to use slider/input/whatever to choose resolution of image.
   - What happens when they resize after drawing? New canvas? Lose info?
 
-### Save/Load
-  - Persist history & allow loading of history.
+## Later:
 
 ### Replay
   - Allow user to "replay" the creation of their image.
   - Possibly add ability to export this as a gif!! That would be cooooool.
 
-### Export
-  - Save png to user's comp
+### Gradient Tool
+  - Fun tool to allow patterned fill! Maybe.
 
 ### Social media sharing?
   - Meh. Maybe.
-
-### Layers
-  - Allow multiple layers!
-  - Allow users to move individual layers
