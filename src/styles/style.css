@@ -40,6 +40,7 @@
   bottom: 0px;
 }
 
+
 .swatch.selected {
   box-shadow: 0 0 2px 2px rgba(255,255,200,0.5);
 }
@@ -51,6 +52,10 @@
   padding-left: 60px;
   height: 32px;
   font-family: Courier, sans-serif;
+}
+
+.pallette-picker {
+  padding: 5px;
 }
 
 .controls button {

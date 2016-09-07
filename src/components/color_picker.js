@@ -23,7 +23,7 @@ export class ColorPicker extends Component {
 
 function mapStateToProps(state) {
   return {
-    swatches: state.swatches
+    swatches: state.swatches.swatches
   }
 }
 

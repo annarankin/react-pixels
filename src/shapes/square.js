@@ -20,6 +20,7 @@ export default class Square {
     const { ctx, path, color } = this
 
     ctx.strokeStyle = '#eee'
+    ctx.lineWidth   = 0.25
     ctx.stroke(path)
   }
 

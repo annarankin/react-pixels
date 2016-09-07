@@ -21,6 +21,7 @@ class App extends Component {
             <GameBoard/>
             <ToolPanel/>
           </div>
+
           <ColorPicker/>
         </div>
       </Provider>
