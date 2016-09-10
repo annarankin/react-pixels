@@ -8,6 +8,12 @@ export class GameBoard extends Component {
     pixelData: PropTypes.array.isRequired,
     dimensions: PropTypes.object.isRequired,
     color: PropTypes.string.isRequired,
+    gridEnabled: PropTypes.bool,
+    drawMode: PropTypes.string,
+  }
+
+  static defaultProps = {
+    gridEnabled: true,
   }
 
   state = {
@@ -39,10 +45,11 @@ export class GameBoard extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    const noChangesOccurred = (_.isEqual(nextProps.pixelData, this.props.pixelData))
+    console.log(this.props, nextProps)
+    const noChangesOccurred = (_.isEqual(nextProps.pixelData, this.props.pixelData) && _.isEqual(nextProps.gridEnabled, this.props.gridEnabled))
     if (noChangesOccurred) { return }
     this.fillPixels(nextProps.pixelData)
-    this.strokeGrid(this.state.pixels)
+    this.strokeGrid(this.state.pixels, nextProps.gridEnabled)
   }
 
   fillPixels = (pixelData) => {
@@ -54,8 +61,9 @@ export class GameBoard extends Component {
     })
   }
 
-  strokeGrid = (pixels) => {
-    if (!this.props.gridEnabled) { return }
+  strokeGrid = (pixels, gridEnabled) => {
+    const enabled = gridEnabled || this.props.gridEnabled
+    if (!gridEnabled) { return }
     pixels.forEach((row, x) => {
       row.forEach((square, y) => {
         square.stroke()

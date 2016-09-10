@@ -46,6 +46,10 @@ Electron/React/Redux application for creating pixel art!
 
 ## Next:
 
+### Code Reorganization
+  - Clean up components & separate out where necessary
+  - Divide into containers & presentational components
+
 ### Layers
   - Allow multiple layers! _(Note: Abstract the grid to layer)_
   - Allow users to move individual layers
