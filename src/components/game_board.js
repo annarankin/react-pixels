@@ -38,18 +38,21 @@ export class GameBoard extends Component {
         return pixel
       })
     })
-    this.setState({pixels: pixels}, () => {
-      this.fillPixels(pixelData)
-      this.strokeGrid(pixels)
+    this.setState({pixels}, () => {
+      this.renderCanvas()
     })
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log(this.props, nextProps)
-    const noChangesOccurred = (_.isEqual(nextProps.pixelData, this.props.pixelData) && _.isEqual(nextProps.gridEnabled, this.props.gridEnabled))
+    this.renderCanvas(nextProps)
+  }
+
+  renderCanvas = (nextProps) => { 
+    console.log('About to recieve props')
+    const noChangesOccurred = (nextProps && _.isEqual(nextProps.pixelData, this.props.pixelData) && _.isEqual(nextProps.gridEnabled, this.props.gridEnabled))
     if (noChangesOccurred) { return }
-    this.fillPixels(nextProps.pixelData)
-    this.strokeGrid(this.state.pixels, nextProps.gridEnabled)
+    this.fillPixels(nextProps ? nextProps.pixelData : this.props.pixelData)
+    this.strokeGrid(nextProps ? nextProps.gridEnabled : this.props.gridEnabled)
   }
 
   fillPixels = (pixelData) => {
@@ -61,10 +64,10 @@ export class GameBoard extends Component {
     })
   }
 
-  strokeGrid = (pixels, gridEnabled) => {
+  strokeGrid = (gridEnabled) => {
     const enabled = gridEnabled || this.props.gridEnabled
     if (!gridEnabled) { return }
-    pixels.forEach((row, x) => {
+    this.state.pixels.forEach((row, x) => {
       row.forEach((square, y) => {
         square.stroke()
       })
@@ -95,27 +98,19 @@ export class GameBoard extends Component {
     const pixelCoords = this.getPixelData(event)
     const gridPixel = this.props.pixelData[pixelCoords.x][pixelCoords.y]
 
-    // debugger
-    if (color === gridPixel.color) { return console.log('Colors are the same!')}
-    console.log('Flood fill BEGIN') 
-
     let queue          = []
     const pixelsToFill = []
     queue.push(gridPixel)
 
     while (queue.length > 0) {
-      // console.log(queue)
       const currentPixel = queue.shift()  
       const neighbors = this.getNeighbors(currentPixel)
-      // debugger
       const toFill = _.filter(neighbors, (neighbor) => {
         console.log(!_.find(pixelsToFill, neighbor))
         return !!neighbor && neighbor.color === currentPixel.color && !_.find(pixelsToFill, neighbor)
       })
       queue = _.uniqWith(queue.concat(toFill), _.isEqual)
       pixelsToFill.push(currentPixel)
-      // either add them to the queue or eliminate them based on color/already analyzed
-      // remove the first pixel from the queue and add it to pixelsToFill
     }
     dispatch({type: 'FILL_PIXEL_GROUP', pixels: pixelsToFill, color})
   }
@@ -132,8 +127,6 @@ export class GameBoard extends Component {
     const bottomNeighbor  = !!pixelData[x][y+1] ? pixelData[x][y + 1] : undefined
     const rightNeighbor   =  !!pixelData[x + 1] ? pixelData[x+1][y] : undefined 
     const leftNeighbor    =  !!pixelData[x - 1] ? pixelData[x-1][y] : undefined 
-    // try to grab neighbors... without dying :/
-    // debugger
     return _.filter([topNeighbor, bottomNeighbor, rightNeighbor, leftNeighbor], (el) => {return !!el} )
   }
   // Event handlers
@@ -167,7 +160,6 @@ export class GameBoard extends Component {
   }
 
   render(){
-    window.board = this
     return(
       <canvas 
         id="game-board" 
