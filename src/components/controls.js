@@ -12,7 +12,21 @@ export class Controls extends Component {
     dispatch: PropTypes.func.isRequired,
   }
 
-  saveImageData = () => {
+  exportImage(event) {
+    const data = document.querySelector('canvas').toDataURL()
+    const processedData = data.replace(/^data:image\/png;base64,/, '')
+    dialog.showSaveDialog((savePath) => {
+      fs.writeFile(savePath, processedData, 'base64', (err) => {
+        if (err) { 
+          console.log(err) 
+        } else {
+          console.log('Saved! 🙌')
+        }
+      })
+    })
+  }
+
+  saveImageData() {
     const { pixelData } = this.props
 
     dialog.showSaveDialog(fileOptions, (savePath) => {
@@ -23,7 +37,7 @@ export class Controls extends Component {
     })
   }
 
-  loadImageData = () => {
+  loadImageData() {
     const { dispatch } = this.props
     
     dialog.showOpenDialog(fileOptions, (filePaths) => {
@@ -35,16 +49,19 @@ export class Controls extends Component {
     })
   }
 
-  render(){
+  render() {
     window.controls = this
     return(
       <div className="controls" style={{['-webkit-app-region']: 'drag', display: 'flex', justifyContent: 'space-around'}}>
         <p>Pixely stuff</p>
         <button
-          onClick={() => { this.saveImageData() } }
+          onClick={::this.exportImage}
+        >Export</button>
+        <button
+          onClick={::this.saveImageData}
         >Save</button>
         <button
-          onClick={() => { this.loadImageData()} }
+          onClick={::this.loadImageData}
         >Load</button>
         <button
           onClick={() => { this.props.dispatch({type: 'CLEAR_PIXELS' }) } }
