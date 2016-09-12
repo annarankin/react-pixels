@@ -6,7 +6,7 @@ import { Layer, BackgroundLayer, GridLayer } from '.'
 export class GameBoard extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    pixelData: PropTypes.array.isRequired,
+    layers: PropTypes.array.isRequired,
     dimensions: PropTypes.object.isRequired,
     color: PropTypes.string.isRequired,
     gridEnabled: PropTypes.bool,
@@ -20,10 +20,11 @@ export class GameBoard extends Component {
   state = {
     pixels: [],
     strokePixels: [],
+    currentLayer: 0,
   }
 
   componentWillReceiveProps(nextProps) {
-    const pixels = this.mapPixelDataToSquares(nextProps.pixelData) 
+    const pixels = this.mapPixelDataToSquares(nextProps.layers) 
     this.setState({pixels})    
   }
 
@@ -33,7 +34,8 @@ export class GameBoard extends Component {
   }
 
   mapPixelDataToSquares(data) {
-    const pixelData = data ? data : this.props.pixelData
+    const { currentLayer } = this.state
+    const pixelData = data ? data[currentLayer].pixelData : this.props.layers[currentLayer].pixelData
     const { size } = this.props.dimensions
     const { ctx } = this
 
@@ -51,13 +53,6 @@ export class GameBoard extends Component {
     })
     return pixels
   }
-
-  // renderCanvas = (nextProps) => { 
-  //   const noChangesOccurred = (nextProps && _.isEqual(nextProps.pixelData, this.props.pixelData) && _.isEqual(nextProps.gridEnabled, this.props.gridEnabled))
-  //   if (noChangesOccurred) { return }
-  //   this.fillPixels(nextProps ? nextProps.pixelData : this.props.pixelData)
-  //   this.strokeGrid(nextProps ? nextProps.gridEnabled : this.props.gridEnabled)
-  // }
 
   getColor = () => {
     const { drawMode, color } = this.props
@@ -86,7 +81,7 @@ export class GameBoard extends Component {
     const { dispatch } = this.props
     const color = this.getColor()
     const pixelCoords = this.getPixelData(event)
-    const gridPixel = this.props.pixelData[pixelCoords.x][pixelCoords.y]
+    const gridPixel = this.props.layers[this.state.currentLayer].pixelData[pixelCoords.x][pixelCoords.y]
 
     let queue          = []
     const pixelsToFill = []
@@ -110,7 +105,7 @@ export class GameBoard extends Component {
 
     const { size }   = this.props.dimensions 
     const { x,y }    = pixel
-    const { pixelData } = this.props
+    const { pixelData } = this.props.layers[this.state.currentLayer]
 
     const topNeighbor     = !!pixelData[x][y-1] ? pixelData[x][y - 1] : undefined
     const bottomNeighbor  = !!pixelData[x][y+1] ? pixelData[x][y + 1] : undefined
@@ -122,7 +117,7 @@ export class GameBoard extends Component {
 
   handleDrag = (event) => {
     if (!this.state.dragging) {return}
-    const { pixelData } = this.props
+    const { pixelData } = this.props.layers[this.state.currentLayer]
     const newPixel = this.getPixelData(event)
     this.fillPixel(event)
     const noChangesOccurred = pixelData[newPixel.x][newPixel.y].color === newPixel.color
@@ -150,7 +145,7 @@ export class GameBoard extends Component {
   }
 
   render(){
-    const { dimensions, pixelData, gridEnabled } = this.props
+    const { dimensions, layers, gridEnabled } = this.props
     return(
       <canvas 
         id="game-board" 
@@ -183,7 +178,7 @@ export class GameBoard extends Component {
 
 function mapStateToProps(state) {
   return {
-    pixelData: state.pixelData.present,
+    layers: state.pixelData.present,
     dimensions: state.dimensions,
     color: state.colors,
     drawMode: state.drawMode,

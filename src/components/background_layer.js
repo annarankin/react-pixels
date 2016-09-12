@@ -19,7 +19,6 @@ export default class BackgroundLayer extends Component {
   }
 
   renderLayer() {
-    console.log('Background rendering')
     const { ctx, dimensions } = this.props
     const { img } = this.state
     if (!img) { return null }

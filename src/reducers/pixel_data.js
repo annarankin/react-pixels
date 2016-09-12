@@ -5,7 +5,7 @@ export default function (state = defaultData(), action) {
   case 'FILL_PIXEL':
     const { newPixel } = action
     const { x, y, color } = action.newPixel
-    const originalColumn = [ ...state[x] ]
+    const originalColumn = [ ...state[0][x] ]
     const originalSquare = { ...originalColumn[y] }
 
     const modifiedColumn = [
@@ -18,15 +18,15 @@ export default function (state = defaultData(), action) {
     ]
 
     return [
-      ...state.slice(0, x),
+      { ...state[0], pixelData: [...state[0].pixelData.slice(0, x),
       modifiedColumn,
-      ...state.slice(x + 1),
+      ...state[0].pixelData.slice(x + 1),]}
     ]
   case 'FILL_PIXEL_GROUP':
     const pixelsToFill = action.pixels
     const stateCopy = _.cloneDeep(state)
     pixelsToFill.forEach((pixel, i) => {
-      stateCopy[pixel.x][pixel.y].color = action.color
+      stateCopy[0].pixelData[pixel.x][pixel.y].color = action.color
     })
     return stateCopy
   case 'LOAD_PIXEL_DATA':
@@ -36,14 +36,14 @@ export default function (state = defaultData(), action) {
   }
 }
 
-function defaultData() {
+function defaultData(position) {
   // 16 x 12 board for now
-  const grid = numberArray(16).map((row, x) => {
+  const pixelData = numberArray(16).map((row, x) => {
     return numberArray(16).map((col, y) => {
       return { x, y, color: 'transparent' }
     })
   })
-  return grid
+  return [ { position: position || 1, pixelData, visible: true } ]
 }
 
 function numberArray(length) {
