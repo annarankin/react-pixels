@@ -22,7 +22,7 @@
   border-radius: 5px;
   padding: 4px;
   background-color: #AAA;
-  margin: 4px 0;
+  margin: 8px;
 }
 .tool-panel button.selected {
   box-shadow: 0 0 2px 2px rgba(255,255,200,0.5);

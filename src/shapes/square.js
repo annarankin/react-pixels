@@ -1,5 +1,5 @@
 export default class Square {
-  constructor(ctx, size=100, center={x: 0, y: 0}, color='#000') {
+  constructor(ctx, size=100, center={x: 0, y: 0}, color=null) {
     this.color = color
     this.size = size
     this.center = center

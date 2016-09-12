@@ -40,7 +40,7 @@ function defaultData() {
   // 16 x 12 board for now
   const grid = numberArray(16).map((row, x) => {
     return numberArray(16).map((col, y) => {
-      return { x, y, color: '#FFF' }
+      return { x, y, color: 'transparent' }
     })
   })
   return grid

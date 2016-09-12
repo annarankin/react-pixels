@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Square } from '../shapes'
+import { Layer, BackgroundLayer, GridLayer } from '.'
 
 export class GameBoard extends Component {
   static propTypes = {
@@ -21,8 +22,18 @@ export class GameBoard extends Component {
     strokePixels: [],
   }
 
-  componentDidMount() {
-    const { pixelData } = this.props
+  componentWillReceiveProps(nextProps) {
+    const pixels = this.mapPixelDataToSquares(nextProps.pixelData) 
+    this.setState({pixels})    
+  }
+
+  componentDidMount() {   
+    const pixels = this.mapPixelDataToSquares() 
+    this.setState({pixels})
+  }
+
+  mapPixelDataToSquares(data) {
+    const pixelData = data ? data : this.props.pixelData
     const { size } = this.props.dimensions
     const { ctx } = this
 
@@ -38,63 +49,42 @@ export class GameBoard extends Component {
         return pixel
       })
     })
-    this.setState({pixels}, () => {
-      this.renderCanvas()
-    })
+    return pixels
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    this.renderCanvas(nextProps)
-  }
+  // renderCanvas = (nextProps) => { 
+  //   const noChangesOccurred = (nextProps && _.isEqual(nextProps.pixelData, this.props.pixelData) && _.isEqual(nextProps.gridEnabled, this.props.gridEnabled))
+  //   if (noChangesOccurred) { return }
+  //   this.fillPixels(nextProps ? nextProps.pixelData : this.props.pixelData)
+  //   this.strokeGrid(nextProps ? nextProps.gridEnabled : this.props.gridEnabled)
+  // }
 
-  renderCanvas = (nextProps) => { 
-    console.log('About to recieve props')
-    const noChangesOccurred = (nextProps && _.isEqual(nextProps.pixelData, this.props.pixelData) && _.isEqual(nextProps.gridEnabled, this.props.gridEnabled))
-    if (noChangesOccurred) { return }
-    this.fillPixels(nextProps ? nextProps.pixelData : this.props.pixelData)
-    this.strokeGrid(nextProps ? nextProps.gridEnabled : this.props.gridEnabled)
-  }
-
-  fillPixels = (pixelData) => {
-    this.state.pixels.forEach((row, x) => {
-      row.forEach((square, y) => {
-        square.color = pixelData[x][y].color
-        square.fill()
-      })
-    })
-  }
-
-  strokeGrid = (gridEnabled) => {
-    const enabled = gridEnabled || this.props.gridEnabled
-    if (!gridEnabled) { return }
-    this.state.pixels.forEach((row, x) => {
-      row.forEach((square, y) => {
-        square.stroke()
-      })
-    })    
+  getColor = () => {
+    const { drawMode, color } = this.props
+    return drawMode === 'erase' ? 'transparent' : color
   }
 
   getPixelData = (event) => {
-    const { color }            = this.props
+    const color                = this.getColor()
     const { size }             = this.props.dimensions 
     const { offsetX, offsetY } = event.nativeEvent
+
 
     const coords = { x: Math.floor(offsetX/size), y: Math.floor(offsetY/size) }
     return { ...coords, color }
   }
 
   fillPixel = (event) => {
-    console.log('action firing')
-    const { dispatch } = this.props
     const newPixel = this.getPixelData(event)
     const gridPixel = this.state.pixels[newPixel.x][newPixel.y]
-    gridPixel.color = this.props.color
+    gridPixel.color = this.getColor()
     gridPixel.fill()
     if (this.props.gridEnabled) {gridPixel.stroke()}
   }
 
   floodFill = (event) => {
-    const { dispatch, color } = this.props
+    const { dispatch } = this.props
+    const color = this.getColor()
     const pixelCoords = this.getPixelData(event)
     const gridPixel = this.props.pixelData[pixelCoords.x][pixelCoords.y]
 
@@ -106,7 +96,6 @@ export class GameBoard extends Component {
       const currentPixel = queue.shift()  
       const neighbors = this.getNeighbors(currentPixel)
       const toFill = _.filter(neighbors, (neighbor) => {
-        console.log(!_.find(pixelsToFill, neighbor))
         return !!neighbor && neighbor.color === currentPixel.color && !_.find(pixelsToFill, neighbor)
       })
       queue = _.uniqWith(queue.concat(toFill), _.isEqual)
@@ -144,7 +133,8 @@ export class GameBoard extends Component {
 
   handleMouseUp = (event) => {
     if (_.isEmpty(this.state.strokePixels)) { return }
-    const { dispatch, color } = this.props
+    const { dispatch } = this.props
+    const color = this.getColor()
     dispatch({type: 'FILL_PIXEL_GROUP', pixels: this.state.strokePixels, color})
     this.setState({ dragging: false, strokePixels: [] })
   }
@@ -160,19 +150,27 @@ export class GameBoard extends Component {
   }
 
   render(){
+    const { dimensions, pixelData, gridEnabled } = this.props
     return(
       <canvas 
         id="game-board" 
-        width={this.props.dimensions.width} 
-        height={this.props.dimensions.height}
+        width={dimensions.width} 
+        height={dimensions.height}
         onMouseDown={(event) => {this.handleMouseDown(event)}}
         onMouseUp={(event) => {this.handleMouseUp(event)}}
         onMouseMove={(event) => { this.handleDrag(event) }}
         onMouseLeave={(event) => {this.handleMouseUp(event)}}
-        ref={this.getContext}
-      >
-        <h1>Too bad!</h1>
-        <p>Your browser does not seem to support canvas. Consider upgrading!</p>
+        ref={this.getContext} >
+        <BackgroundLayer
+          pixels={this.state.pixels}
+          dimensions={dimensions} 
+          ctx={this.ctx} />
+        <Layer 
+          pixels={this.state.pixels}
+          dimensions={dimensions} />
+        <GridLayer
+          pixels={this.state.pixels}
+          gridEnabled={gridEnabled} />
       </canvas>
     )
   }

@@ -2,7 +2,7 @@ const {app, BrowserWindow} = require('electron')
 let win
 
 function createWindow () {
-  win = new BrowserWindow({width: 600, height: 600, titleBarStyle: 'hidden', backgroundColor: '#369', resizable: false})
+  win = new BrowserWindow({ titleBarStyle: 'hidden', backgroundColor: '#369'})
 
   win.loadURL(`file://${__dirname}/app/index.html`)
 

@@ -7,7 +7,6 @@ export class ToolPanel extends Component {
     dispatch: PropTypes.func.isRequired,
   }
   render(){
-    window.controls = this
     return(
       <div className="tool-panel">
         <button
@@ -21,6 +20,12 @@ export class ToolPanel extends Component {
           onClick={() => { this.props.dispatch({type: 'SWITCH_MODE', mode: 'fill'}) } }
         >
           <img src="./images/bucket.png"/>
+        </button>
+        <button
+          className={this.props.drawMode === 'erase' ? 'selected' : null}
+          onClick={() => { this.props.dispatch({type: 'SWITCH_MODE', mode: 'erase'}) }}
+        >
+          <img src="./images/eraser.png"/>
         </button>
         <button
           className={!!this.props.gridEnabled ? 'highlighted' : null}
