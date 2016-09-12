@@ -38,16 +38,12 @@ Electron/React/Redux application for creating pixel art!
 ### Building with Electron
   - `npm run dist` should work fine. Just need to make sure there are no code-signing problems. 
 
-# Bugs! 🐛
-
-- Grid toggle button does not trigger a re-render of the canvas.
-
 # Upcoming Features 🌅
 
 ## Next:
 
 ### Code Reorganization
-  - Clean up components & separate out where necessary
+  - Clean up components & separate out where necessary ✅
   - Divide into containers & presentational components
 
 ### Layers
