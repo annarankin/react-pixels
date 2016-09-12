@@ -178,7 +178,7 @@ export class GameBoard extends Component {
 
 function mapStateToProps(state) {
   return {
-    layers: state.pixelData.present,
+    layers: state.layers.present,
     dimensions: state.dimensions,
     color: state.colors,
     drawMode: state.drawMode,

@@ -7,7 +7,7 @@ import * as reducers from '../reducers'
 // const undoableReducers = {}
 // reducerNames.forEach((reducerName) => undoableReducers[reducerName] = undoable(reducers[reducerName]))
 
-reducers.pixelData = undoable(reducers.pixelData, { filter: includeAction('FILL_PIXEL_GROUP') })
+reducers.layers = undoable(reducers.layers, { filter: includeAction('FILL_PIXEL_GROUP') })
 
 const reducer = combineReducers(reducers)
 export default reducer

@@ -1,7 +1,12 @@
 export default function (state = defaultData(), action) {
   switch(action.type) {
+
+  case 'ADD_LAYER':
+    return state.concat(defaultData(1))
+
   case 'CLEAR_PIXELS':
     return defaultData()
+  
   case 'FILL_PIXEL':
     const { newPixel } = action
     const { x, y, color } = action.newPixel
@@ -22,6 +27,7 @@ export default function (state = defaultData(), action) {
       modifiedColumn,
       ...state[0].pixelData.slice(x + 1),]}
     ]
+  
   case 'FILL_PIXEL_GROUP':
     const pixelsToFill = action.pixels
     const stateCopy = _.cloneDeep(state)
@@ -29,8 +35,10 @@ export default function (state = defaultData(), action) {
       stateCopy[0].pixelData[pixel.x][pixel.y].color = action.color
     })
     return stateCopy
+  
   case 'LOAD_PIXEL_DATA':
     return action.pixels
+  
   default:
     return state
   }
@@ -43,7 +51,7 @@ function defaultData(position) {
       return { x, y, color: 'transparent' }
     })
   })
-  return [ { position: position || 1, pixelData, visible: true } ]
+  return [ { position: position || 0, pixelData, visible: true } ]
 }
 
 function numberArray(length) {

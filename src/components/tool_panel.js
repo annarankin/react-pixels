@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { PallettePicker } from '.'  
+import { PallettePicker, LayerPallette } from '.'  
 
 export class ToolPanel extends Component {
   static propTypes = {
@@ -34,6 +34,7 @@ export class ToolPanel extends Component {
           <img src="./images/grid.png"/>
         </button>
         <PallettePicker />
+        <LayerPallette />
       </div>
     )
   } 
